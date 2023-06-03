@@ -1,0 +1,13 @@
+train: D:\\projeto\\grass.v1i.yolov8\\train\\images
+val: D:\\projeto\\grass.v1i.yolov8\\valid\\images
+test: D:\\projeto\\grass.v1i.yolov8\\test\\images
+
+nc: 3
+names: ['grama curta', 'grama grande', 'grama media']
+
+roboflow:
+  workspace: project
+  project: grass-77a7d
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/project/grass-77a7d/dataset/1
