@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @SpringBootApplication
 @EntityScan(
 		basePackages = {
-				"com.ago.inteligente.User.Repository"
+				"com.ago.inteligente.User.Repository",
+				"com.ago.inteligente.Token"
 		}
 )
 public class AgroInteligenteApplication {

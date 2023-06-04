@@ -1,5 +1,6 @@
 package com.ago.inteligente.Configuration.Security;
 
+import com.ago.inteligente.User.Domain.UserDto;
 import com.ago.inteligente.User.Repository.UserModelRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -11,39 +12,58 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.security.Key;
 import java.util.function.Function;
 @Service
-public class JwtService {
+public class JwtService implements IJwtService{
 
-    @Value("jwt.security.hash")
-    private String hashEncode;
+    @Value("${application.security.jwt.secret-key}")
+    private String secretKey;
+    @Value("${application.security.jwt.expiration}")
+    private int jwtExpiration;
+    @Value("${application.security.jwt.refresh-token.expiration}")
+    private int refreshExpiration;
 
 
-    public String generateToken(UserModelRepository userDetails){
+    public String generateToken(UserDto userDto){
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put("id_user", userDetails.getId());
+        claims.put("id_user", userDto.getId());
 
-        return generateToken(claims, userDetails);
+        return generateToken(claims, userDto, this.jwtExpiration);
     }
 
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails){
+    @Override
+    public int gerarTimeout(int timeoutMin) {
+        return (timeoutMin * 60 * 1000);
+    }
+
+    @Override
+    public String generateRefreshToken(UserDto userDto) {
+        return this.generateToken(new HashMap<>(), userDto, this.refreshExpiration);
+    }
+
+    private String generateToken(Map<String, Object> extraClaims, UserDto userDto, int timeout){
+        long currentTimeMillis = System.currentTimeMillis();
+        long expirationTimeMillis = currentTimeMillis + gerarTimeout(timeout);
+
+
         return Jwts.builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(userDto.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*24))
+                .setExpiration(new Date(expirationTimeMillis))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails){
+    public boolean isTokenValid(String token, UserDetails user){
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        return (username.equals(user.getUsername())) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
@@ -56,7 +76,7 @@ public class JwtService {
 
 
     private Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(hashEncode);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 
         return Keys.hmacShaKeyFor(keyBytes);
     }

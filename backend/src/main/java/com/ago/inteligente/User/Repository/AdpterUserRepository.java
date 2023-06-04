@@ -18,8 +18,8 @@ public class AdpterUserRepository implements IAdpterUserRepository{
     private IUserRepository repository;
 
     @Override
-    public void save(UserRegisterDto register) {
-        this.repository.save(UserModelRepository.toModelRegister(register));
+    public UserDto save(UserRegisterDto register) {
+        return this.repository.save(UserModelRepository.toModelRegister(register)).toDomain();
     }
 
     @Override

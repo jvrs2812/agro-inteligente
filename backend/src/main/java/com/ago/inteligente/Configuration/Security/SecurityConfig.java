@@ -27,8 +27,7 @@ public class SecurityConfig {
                 .disable()
                 .authorizeHttpRequests(
                         authorizeConfig -> {
-                            authorizeConfig.requestMatchers(HttpMethod.POST, "/v1/api/auth/login").permitAll();
-                            authorizeConfig.requestMatchers(HttpMethod.POST, "/v1/api/auth/register").permitAll();
+                            authorizeConfig.requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll();
                             authorizeConfig.anyRequest().authenticated();
                         }
                 )

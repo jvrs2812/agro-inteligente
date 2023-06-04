@@ -14,7 +14,9 @@ public class CaseUtils {
         return this.passwordEncoder.encode(password);
     }
 
-
+    public boolean matchPassword(String rawPassword, String encodedPassword){
+        return this.passwordEncoder.matches(rawPassword, encodedPassword);
+    }
 
 
 }
