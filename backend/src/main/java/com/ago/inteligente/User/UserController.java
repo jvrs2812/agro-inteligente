@@ -3,6 +3,8 @@ package com.ago.inteligente.User;
 import com.ago.inteligente.User.Domain.UserAuth;
 import com.ago.inteligente.User.Domain.UserRegisterDto;
 import com.ago.inteligente.User.UseCases.UserResgister;
+import com.ago.inteligente.Utils.Commom.Exception.AgroException;
+import com.ago.inteligente.Utils.Commom.HandleControllerCommom;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
@@ -16,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class UserController {
+public class UserController extends HandleControllerCommom {
 
     @Autowired
     private UserResgister register;
 
-    @PostMapping("v1/users")
-    public ResponseEntity getUser(@Valid @RequestBody UserRegisterDto userRegisterDto){
+    @PostMapping("v1/api/auth/register")
+    public ResponseEntity getUser(@Valid @RequestBody UserRegisterDto userRegisterDto) throws AgroException {
 
         this.register.Register(userRegisterDto);
 
