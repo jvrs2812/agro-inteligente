@@ -8,7 +8,7 @@
 		<version>3.1.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.ago.inteligente</groupId>
+	<groupId>com.agro.inteligente</groupId>
 	<artifactId>agro-inteligente</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>agro-inteligente</name>
