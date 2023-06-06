@@ -3,7 +3,7 @@ package com.agro.inteligente.Token.Repository;
 import com.agro.inteligente.Token.Token;
 import com.agro.inteligente.Token.TokenType;
 import com.agro.inteligente.User.Domain.UserDto;
-import com.agro.inteligente.User.Repository.UserModelRepository;
+import com.agro.inteligente.User.Repository.Models.UserModelRepository;
 import com.agro.inteligente.Utils.Commom.Exception.AgroException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;

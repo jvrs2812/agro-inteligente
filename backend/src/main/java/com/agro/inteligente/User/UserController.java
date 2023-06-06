@@ -1,9 +1,6 @@
 package com.agro.inteligente.User;
 
-import com.agro.inteligente.User.Domain.UserAuth;
-import com.agro.inteligente.User.Domain.UserRefreshToken;
-import com.agro.inteligente.User.Domain.UserRegisterDto;
-import com.agro.inteligente.User.Domain.UserResponse;
+import com.agro.inteligente.User.Domain.*;
 import com.agro.inteligente.User.UseCases.Authentication;
 import com.agro.inteligente.Utils.Commom.Exception.AgroException;
 import com.agro.inteligente.Utils.Commom.HandleControllerCommom;
@@ -38,5 +35,10 @@ public class UserController extends HandleControllerCommom {
     @PostMapping("/refresh-token")
     public ResponseEntity<ResponseSchema<UserResponse>> refreshToken(@Valid @RequestBody UserRefreshToken refreshToken) throws AgroException {
         return new ResponseEntity(new ResponseSchema<UserResponse>(this.auth.refreshToken(refreshToken)), HttpStatus.OK);
+    }
+
+    @PostMapping("/recovery-password")
+    public ResponseEntity recoveryPassword(@Valid @RequestBody UserRecoveryPassword recoveryPassword){
+        return new ResponseEntity(null, HttpStatus.OK);
     }
 }

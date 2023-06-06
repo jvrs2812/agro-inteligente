@@ -1,6 +1,6 @@
 package com.agro.inteligente.Token;
 
-import com.agro.inteligente.User.Repository.UserModelRepository;
+import com.agro.inteligente.User.Repository.Models.UserModelRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

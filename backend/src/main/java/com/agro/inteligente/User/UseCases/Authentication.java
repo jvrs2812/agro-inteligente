@@ -3,8 +3,8 @@ package com.agro.inteligente.User.UseCases;
 import com.agro.inteligente.Configuration.Security.IJwtService;
 import com.agro.inteligente.Token.Repository.IAdpterToken;
 import com.agro.inteligente.User.Domain.*;
-import com.agro.inteligente.User.Repository.IAdpterUserRepository;
-import com.agro.inteligente.User.Repository.UserModelRepository;
+import com.agro.inteligente.User.Repository.Adapters.IAdapterUserRepository;
+import com.agro.inteligente.User.Repository.Models.UserModelRepository;
 import com.agro.inteligente.Utils.CaseUtils;
 import com.agro.inteligente.Utils.Commom.Exception.AgroException;
 import com.agro.inteligente.Utils.Commom.IValidation;
@@ -22,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class Authentication {
 
-    private final IAdpterUserRepository repository;
+    private final IAdapterUserRepository repository;
 
     private final CaseUtils utils;
 
@@ -43,11 +43,11 @@ public class Authentication {
         if(this.repository.existEmail(register.getEmail()))
             throw new AgroException(UserExceptionEnum.EMAIL_EXIST);
 
-        if(this.repository.existCpf(register.getCpf()))
-            throw new AgroException(UserExceptionEnum.CPF_EXIST);
-
         if(!this.validation.isValidCpf(register.getCpf()))
             throw new AgroException(UserExceptionEnum.CPF_NOT_VALID);
+
+        if(this.repository.existCpf(register.getCpf()))
+            throw new AgroException(UserExceptionEnum.CPF_EXIST);
 
         register.setPassword(this.utils.encodePassword(register.getPassword()));
 

@@ -1,5 +1,6 @@
 package com.agro.inteligente.User.Repository;
 
+import com.agro.inteligente.User.Repository.Models.UserModelRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

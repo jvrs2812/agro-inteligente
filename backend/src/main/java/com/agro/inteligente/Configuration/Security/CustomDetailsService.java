@@ -1,8 +1,8 @@
 package com.agro.inteligente.Configuration.Security;
 
 import com.agro.inteligente.User.Domain.UserDto;
-import com.agro.inteligente.User.Repository.IAdpterUserRepository;
-import com.agro.inteligente.User.Repository.UserModelRepository;
+import com.agro.inteligente.User.Repository.Adapters.IAdapterUserRepository;
+import com.agro.inteligente.User.Repository.Models.UserModelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CustomDetailsService implements UserDetailsService {
 
-    private final IAdpterUserRepository repository;
+    private final IAdapterUserRepository repository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

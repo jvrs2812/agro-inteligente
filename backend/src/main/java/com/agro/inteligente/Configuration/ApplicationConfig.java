@@ -2,7 +2,7 @@ package com.agro.inteligente.Configuration;
 
 import br.com.caelum.stella.validation.CPFValidator;
 import com.agro.inteligente.Configuration.Security.CustomDetailsService;
-import com.agro.inteligente.User.Repository.IAdpterUserRepository;
+import com.agro.inteligente.User.Repository.Adapters.IAdapterUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,12 +13,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final IAdpterUserRepository userRepository;
+    private final IAdapterUserRepository userRepository;
 
     private final CustomDetailsService userDetailsService;
     @Bean
@@ -47,6 +48,11 @@ public class ApplicationConfig {
     @Bean
     public CPFValidator cpfValidator(){
         return new CPFValidator();
+    }
+
+    @Bean
+    public ClassLoaderTemplateResolver classLoaderTemplateResolver(){
+        return new ClassLoaderTemplateResolver();
     }
 }
 

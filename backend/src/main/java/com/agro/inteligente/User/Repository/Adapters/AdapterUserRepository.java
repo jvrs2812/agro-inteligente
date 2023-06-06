@@ -1,15 +1,17 @@
-package com.agro.inteligente.User.Repository;
+package com.agro.inteligente.User.Repository.Adapters;
 
 
 import com.agro.inteligente.User.Domain.UserDto;
 import com.agro.inteligente.User.Domain.UserRegisterDto;
+import com.agro.inteligente.User.Repository.IUserRepository;
+import com.agro.inteligente.User.Repository.Models.UserModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class AdpterUserRepository implements IAdpterUserRepository{
+public class AdapterUserRepository implements IAdapterUserRepository {
 
     @Autowired
     private IUserRepository repository;

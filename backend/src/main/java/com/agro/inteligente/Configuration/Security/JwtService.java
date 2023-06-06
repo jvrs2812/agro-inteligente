@@ -1,7 +1,7 @@
 package com.agro.inteligente.Configuration.Security;
 
 import com.agro.inteligente.User.Domain.UserDto;
-import com.agro.inteligente.User.Repository.UserModelRepository;
+import com.agro.inteligente.User.Repository.Models.UserModelRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;

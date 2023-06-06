@@ -1,4 +1,4 @@
-package com.agro.inteligente.User.Repository;
+package com.agro.inteligente.User.Repository.Models;
 
 import com.agro.inteligente.User.Domain.UserDto;
 import com.agro.inteligente.User.Domain.UserRegisterDto;
@@ -90,7 +90,7 @@ public class UserModelRepository implements UserDetails {
         this.cpf = cpf;
     }
 
-    static UserModelRepository toModelRegister(UserRegisterDto register){
+    public static UserModelRepository toModelRegister(UserRegisterDto register){
         UserModelRepository userModel = new UserModelRepository();
         userModel.id = UUID.randomUUID();
         userModel.cpf = register.getCpf();
@@ -109,7 +109,7 @@ public class UserModelRepository implements UserDetails {
 
         return userModel;
     }
-    UserDto toDomain(){
+    public UserDto toDomain(){
         return UserDto.builder().
                 cpf(this.cpf)
                 .email(this.email)
