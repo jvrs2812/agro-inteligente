@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController extends HandleControllerCommom {
 
-    private Authentication auth;
+    private final Authentication auth;
 
     private final Recovery recovery;
 
