@@ -12,4 +12,6 @@ public interface IAdapterUserRecoveryPasswordRepository {
     Optional<UserResponseRecoveryPassword> findById(UUID id);
 
     UserResponseRecoveryPassword save(LocalDateTime expiredAt);
+
+    void updateSendEmail(UUID id);
 }

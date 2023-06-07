@@ -20,11 +20,12 @@ public class ArchiveImp implements IArchive{
     @Override
     public String alterArchive(String name, Map<String, Object> parameters) {
 
+        this.classLoaderTemplateResolver.setPrefix("/templates/");
         this.classLoaderTemplateResolver.setSuffix(".html");
 
         this.classLoaderTemplateResolver.setTemplateMode(TemplateMode.HTML);
 
-        TemplateEngine templateEngine = new TemplateEngine();
+        final TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(this.classLoaderTemplateResolver);
 
         Context context = new Context();

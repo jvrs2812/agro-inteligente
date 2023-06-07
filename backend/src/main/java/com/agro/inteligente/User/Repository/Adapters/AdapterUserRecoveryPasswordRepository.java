@@ -38,4 +38,9 @@ public class AdapterUserRecoveryPasswordRepository implements IAdapterUserRecove
 
         return this.repository.save(model).toDomain();
     }
+
+    @Override
+    public void updateSendEmail(UUID id) {
+        this.repository.updateEmailSend(id);
+    }
 }
