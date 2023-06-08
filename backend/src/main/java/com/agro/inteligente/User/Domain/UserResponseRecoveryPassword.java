@@ -10,4 +10,10 @@ public class UserResponseRecoveryPassword {
     private String id;
 
     private LocalDateTime expiredAt;
+
+    private String email;
+
+    private boolean emailSend;
+
+    private boolean resetPassword;
 }

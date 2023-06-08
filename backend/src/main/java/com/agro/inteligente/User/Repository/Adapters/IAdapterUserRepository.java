@@ -4,6 +4,7 @@ import com.agro.inteligente.User.Domain.UserDto;
 import com.agro.inteligente.User.Domain.UserRegisterDto;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface IAdapterUserRepository {
     UserDto save(UserRegisterDto register);
@@ -13,4 +14,6 @@ public interface IAdapterUserRepository {
     boolean existEmail(String email);
 
     boolean existCpf(String cpf);
+
+    void updatePasswordWithEmail(String email, String newPassword);
 }

@@ -29,12 +29,13 @@ public class AdapterUserRecoveryPasswordRepository implements IAdapterUserRecove
     }
 
     @Override
-    public UserResponseRecoveryPassword save(LocalDateTime expiredAt) {
+    public UserResponseRecoveryPassword save(LocalDateTime expiredAt, String email) {
         UserRecoveryPasswordModel model = new UserRecoveryPasswordModel();
 
         model.setId(UUID.randomUUID());
         model.setExpiredAt(expiredAt);
         model.setEmailSend(false);
+        model.setEmail(email);
 
         return this.repository.save(model).toDomain();
     }
@@ -42,5 +43,10 @@ public class AdapterUserRecoveryPasswordRepository implements IAdapterUserRecove
     @Override
     public void updateSendEmail(UUID id) {
         this.repository.updateEmailSend(id);
+    }
+
+    @Override
+    public void recoverySucess(UUID id) {
+        this.repository.recoverySucess(id);
     }
 }

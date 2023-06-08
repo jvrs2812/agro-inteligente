@@ -11,7 +11,9 @@ import java.util.UUID;
 public interface IAdapterUserRecoveryPasswordRepository {
     Optional<UserResponseRecoveryPassword> findById(UUID id);
 
-    UserResponseRecoveryPassword save(LocalDateTime expiredAt);
+    UserResponseRecoveryPassword save(LocalDateTime expiredAt, String email);
 
     void updateSendEmail(UUID id);
+
+    void recoverySucess(UUID id);
 }

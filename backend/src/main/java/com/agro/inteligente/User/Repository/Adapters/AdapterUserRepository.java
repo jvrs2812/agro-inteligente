@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AdapterUserRepository implements IAdapterUserRepository {
@@ -42,5 +43,10 @@ public class AdapterUserRepository implements IAdapterUserRepository {
     @Override
     public boolean existCpf(String cpf) {
         return this.repository.existByCpf(cpf);
+    }
+
+    @Override
+    public void updatePasswordWithEmail(String email, String newPassword) {
+        this.repository.updatePasswordWithId(email, newPassword);
     }
 }

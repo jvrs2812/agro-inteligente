@@ -17,4 +17,9 @@ public interface IUserRecoveryPasswordRepository extends JpaRepository<UserRecov
     @Transactional
     @Query(value = "update recovery_password set email_send = true where id= :id", nativeQuery = true)
     void updateEmailSend(@Param("id") UUID id);
+
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query(value = "update recovery_password set reset_password = true where id= :id", nativeQuery = true)
+    void recoverySucess(@Param("id") UUID id);
 }

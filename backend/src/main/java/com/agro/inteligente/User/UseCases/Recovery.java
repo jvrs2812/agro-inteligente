@@ -5,7 +5,10 @@ import com.agro.inteligente.User.Domain.UserRecoveryPassword;
 import com.agro.inteligente.User.Domain.UserResponseRecoveryPassword;
 import com.agro.inteligente.User.Repository.Adapters.IAdapterUserRecoveryPasswordRepository;
 import com.agro.inteligente.User.Repository.Adapters.IAdapterUserRepository;
+import com.agro.inteligente.Utils.CaseUtils;
 import com.agro.inteligente.Utils.Commom.Archive.IArchive;
+import com.agro.inteligente.Utils.Commom.Exception.AgroException;
+import com.agro.inteligente.Utils.Commom.IValidation;
 import com.agro.inteligente.Utils.Email.IEmailService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -18,6 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+
+import static com.agro.inteligente.User.Exception.UserExceptionEnum.*;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +38,10 @@ public class Recovery {
 
     private final IArchive archive;
 
+    private final IValidation validation;
+
+    private final CaseUtils caseUtils;
+
     @Value("${url_producao}")
     private String url_producao;
 
@@ -42,7 +51,7 @@ public class Recovery {
         if(user.isEmpty())
             return;
 
-        UserResponseRecoveryPassword recoveryPasswordSaved = this.adapter.save(LocalDateTime.now().minusMinutes(15));
+        UserResponseRecoveryPassword recoveryPasswordSaved = this.adapter.save(LocalDateTime.now().plusMinutes(15), recoveryPassword.getEmail());
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -54,6 +63,34 @@ public class Recovery {
             this.logger.info("Email de recovery de senha foi enviado. id "+recoveryPasswordSaved.getId());
         }catch (RuntimeException e){
             logger.error("Email falhou para enviar id: "+recoveryPasswordSaved.getId());
+        }
+    }
+
+    public void recoveryPasswordWithId(String id, String newPassword) throws AgroException {
+        if(this.validation.isValidId(id)){
+            Optional<UserResponseRecoveryPassword> recoveryPasswordOptional = this.adapter.findById(UUID.fromString(id));
+
+            if(recoveryPasswordOptional.isEmpty())
+                throw new AgroException(ID_IS_NOT_VALID);
+
+            UserResponseRecoveryPassword recoveryPassword = recoveryPasswordOptional.get();
+
+            if(recoveryPassword.getExpiredAt().isBefore(LocalDateTime.now()))
+                throw new AgroException(RECOVERY_IS_EXPIRED);
+
+            if(recoveryPassword.isResetPassword())
+                throw new AgroException(RECOVERY_IS_UTILIZED);
+
+            Optional<UserDto> user = this.adapterUser.findByEmail(recoveryPassword.getEmail());
+
+            if(user.isEmpty())
+                throw new AgroException(USER_NOT_EXIST);
+
+            this.adapterUser.updatePasswordWithEmail(user.get().getEmail(), this.caseUtils.encodePassword(newPassword));
+
+            this.adapter.recoverySucess(UUID.fromString(id));
+        }else{
+            throw new AgroException(ID_IS_NOT_VALID);
         }
     }
 }

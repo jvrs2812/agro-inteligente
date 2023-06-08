@@ -24,6 +24,28 @@ public class UserRecoveryPasswordModel {
     @NotNull
     private boolean emailSend;
 
+    @NotNull
+    private String email;
+
+    @NotNull
+    private boolean resetPassword;
+
+    public boolean isResetPassword() {
+        return resetPassword;
+    }
+
+    public void setResetPassword(boolean resetPassword) {
+        this.resetPassword = resetPassword;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public boolean isEmailSend() {
         return emailSend;
     }
@@ -52,6 +74,9 @@ public class UserRecoveryPasswordModel {
         UserResponseRecoveryPassword dto = new UserResponseRecoveryPassword();
         dto.setId(this.id.toString());
         dto.setExpiredAt(this.expiredAt);
+        dto.setResetPassword(this.resetPassword);
+        dto.setEmailSend(this.emailSend);
+        dto.setEmail(this.email);
 
         return dto;
     }
