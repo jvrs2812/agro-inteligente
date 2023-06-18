@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agradecimento de Cadastro</title>
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid #ddd;
+    }
+
+    p {
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+
+    .signature {
+      text-align: right;
+      font-style: italic;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+    <h2>Agradecimento de Cadastro</h2>
+    <hr>
+    <p>Olá <span th:text="${nome_empresa}"></span>,</p>
+    <p>Agradecemos por cadastrar sua empresa em nosso sistema. Estamos felizes em tê-lo(a) como parte da nossa comunidade!</p>
+    <p>A partir de agora, você poderá aproveitar todos os recursos e benefícios que nosso sistema oferece.</p>
+    <p>Em caso de dúvidas ou necessidade de suporte, não hesite em entrar em contato conosco. Estamos aqui para ajudar!</p>
+    <p class="signature">Atenciosamente,<br>A equipe do Agro Inteligente</p>
+    <hr>
+    <p style="text-align: center; color: #888;">Este é um e-mail automático, por favor, não responda.</p>
+</div>
+</body>
+</html>

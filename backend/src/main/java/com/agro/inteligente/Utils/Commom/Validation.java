@@ -1,5 +1,7 @@
 package com.agro.inteligente.Utils.Commom;
 
+import br.com.caelum.stella.tinytype.CNPJ;
+import br.com.caelum.stella.validation.CNPJValidator;
 import br.com.caelum.stella.validation.CPFValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,8 @@ import java.util.UUID;
 public class Validation implements IValidation {
 
     private final CPFValidator cpfValidator;
+
+    private final CNPJValidator cnpjValidator;
 
     @Override
     public boolean isValidCpf(String cpf){
@@ -34,5 +38,14 @@ public class Validation implements IValidation {
         }
     }
 
+    @Override
+    public boolean isValidCNPJ(String cnpj) {
+        try{
+            this.cnpjValidator.assertValid(cnpj);
+            return true;
+        }catch (InvalidStateException e){
+            return false;
+        }
+    }
 
 }

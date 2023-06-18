@@ -58,8 +58,9 @@ public class EmailService implements IEmailService{
         try{
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(email));
-             message.setRecipient(Message.RecipientType.TO, InternetAddress.parse(destinatario)[0]);
+            message.setRecipient(Message.RecipientType.TO, InternetAddress.parse(destinatario)[0]);
             message.setText(html);
+            message.setSubject(assunto);
 
             MimeMultipart multipart = new MimeMultipart("alternative");
 

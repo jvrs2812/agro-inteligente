@@ -1,5 +1,6 @@
 package com.agro.inteligente.Configuration;
 
+import br.com.caelum.stella.validation.CNPJValidator;
 import br.com.caelum.stella.validation.CPFValidator;
 import com.agro.inteligente.Configuration.Security.CustomDetailsService;
 import com.agro.inteligente.User.Repository.Adapters.IAdapterUserRepository;
@@ -48,6 +49,11 @@ public class ApplicationConfig {
     @Bean
     public CPFValidator cpfValidator(){
         return new CPFValidator();
+    }
+
+    @Bean
+    public CNPJValidator cnpjValidator(){
+        return new CNPJValidator();
     }
 
     @Bean
