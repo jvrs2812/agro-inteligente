@@ -49,4 +49,8 @@ public class UserController extends HandleControllerCommom {
         this.recovery.recoveryPasswordWithId(id, userNewPassword.getPassword());
         return new ResponseEntity(null, HttpStatus.OK);
     }
+    @GetMapping("/recovery-password/{id}")
+    public ResponseEntity recoveryPasswordGet(){
+        return new ResponseEntity("ola", HttpStatus.OK);
+    }
 }

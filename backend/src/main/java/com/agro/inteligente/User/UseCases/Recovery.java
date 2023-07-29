@@ -1,5 +1,7 @@
 package com.agro.inteligente.User.UseCases;
 
+import com.agro.inteligente.Email.Domain.EmailSaveDto;
+import com.agro.inteligente.Email.Repository.Adapters.IAdapterEmailRepository;
 import com.agro.inteligente.User.Domain.UserDto;
 import com.agro.inteligente.User.Domain.UserRecoveryPassword;
 import com.agro.inteligente.User.Domain.UserResponseRecoveryPassword;
@@ -9,7 +11,7 @@ import com.agro.inteligente.Utils.CaseUtils;
 import com.agro.inteligente.Utils.Commom.Archive.IArchive;
 import com.agro.inteligente.Utils.Commom.Exception.AgroException;
 import com.agro.inteligente.Utils.Commom.IValidation;
-import com.agro.inteligente.Utils.Email.IEmailService;
+import com.agro.inteligente.Email.IEmailService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,13 +36,13 @@ public class Recovery {
 
     private final IAdapterUserRepository adapterUser;
 
-    private final IEmailService emailService;
-
     private final IArchive archive;
 
     private final IValidation validation;
 
     private final CaseUtils caseUtils;
+
+    private final IAdapterEmailRepository emailRepository;
 
     @Value("${url_producao}")
     private String url_producao;
@@ -55,15 +57,21 @@ public class Recovery {
 
         Map<String, Object> map = new HashMap<String, Object>();
 
-        map.put("url",this.url_producao+"/"+recoveryPasswordSaved.getId().toString());
+        map.put("url",this.url_producao+"/api/v1/auth/recovery-password/"+recoveryPasswordSaved.getId().toString());
 
-        try{
-            this.emailService.enviarEmail(recoveryPassword.getEmail(), "Recuperação de senha", "", this.archive.alterArchive("recovery_password", map));
-            this.adapter.updateSendEmail(UUID.fromString(recoveryPasswordSaved.getId()));
-            this.logger.info("Email de recovery de senha foi enviado. id "+recoveryPasswordSaved.getId());
-        }catch (RuntimeException e){
-            logger.error("Email falhou para enviar id: "+recoveryPasswordSaved.getId());
-        }
+
+        this.emailRepository.saveEmail(
+                EmailSaveDto
+                        .builder()
+                        .destiny(recoveryPassword.getEmail())
+                        .subject("Recuperação de senha")
+                        .message("")
+                        .html(this.archive.alterArchive("recovery_password", map))
+                        .build()
+            );
+
+        this.adapter.updateSendEmail(UUID.fromString(recoveryPasswordSaved.getId()));
+        this.logger.info("Email de recovery de senha foi agendado. id "+recoveryPasswordSaved.getId());
     }
 
     public void recoveryPasswordWithId(String id, String newPassword) throws AgroException {

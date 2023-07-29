@@ -1,14 +1,19 @@
 package com.agro.inteligente.Enterprise.UseCase;
 
 import com.agro.inteligente.Configuration.Security.JwtService;
+import com.agro.inteligente.Email.Domain.EmailSaveDto;
+import com.agro.inteligente.Email.Repository.Adapters.IAdapterEmailRepository;
 import com.agro.inteligente.Enterprise.Repository.Adapters.IAdapterEnterpriseRepository;
 import com.agro.inteligente.Enterprise.Domain.EnterpriseDto;
 import com.agro.inteligente.User.Repository.Models.UserModelRepository;
+import com.agro.inteligente.User.UseCases.Recovery;
 import com.agro.inteligente.Utils.Commom.Archive.IArchive;
 import com.agro.inteligente.Utils.Commom.Exception.AgroException;
 import com.agro.inteligente.Utils.Commom.Validation;
-import com.agro.inteligente.Utils.Email.IEmailService;
+import com.agro.inteligente.Email.IEmailService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -27,9 +32,11 @@ public class EnterpriseCase {
 
     private final Validation validation;
 
-    private final IEmailService emailService;
+    private final IAdapterEmailRepository emailRepository;
 
     private final IArchive archive;
+
+    private Logger logger = LoggerFactory.getLogger(EnterpriseCase.class);
 
     public void CreateEnterprise(EnterpriseDto enterpriseDto) throws AgroException {
         if(!this.validation.isValidCNPJ(enterpriseDto.getCnpj()))
@@ -48,6 +55,17 @@ public class EnterpriseCase {
 
         String html = this.archive.alterArchive("new_enterprise_create", map);
 
-        this.emailService.enviarEmail(userLogged.getEmail(), "Empresa Criada com sucesso", "", html);
+        this.emailRepository.saveEmail(
+                EmailSaveDto
+                        .builder()
+                        .destiny(userLogged.getEmail())
+                        .subject("Empresa Criada com sucesso")
+                        .message("")
+                        .html(html)
+                        .build()
+        );
+
+        this.logger.info("Email de empresa criada foi agendado. email a ser enviado = " + userLogged.getEmail());
+
     }
 }

@@ -1,4 +1,4 @@
-package com.agro.inteligente.Utils.Email;
+package com.agro.inteligente.Email;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
