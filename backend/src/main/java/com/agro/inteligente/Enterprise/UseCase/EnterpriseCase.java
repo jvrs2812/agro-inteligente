@@ -3,6 +3,7 @@ package com.agro.inteligente.Enterprise.UseCase;
 import com.agro.inteligente.Configuration.Security.JwtService;
 import com.agro.inteligente.Email.Domain.EmailSaveDto;
 import com.agro.inteligente.Email.Repository.Adapters.IAdapterEmailRepository;
+import com.agro.inteligente.Enterprise.Domain.EnterpriseResponseDto;
 import com.agro.inteligente.Enterprise.Repository.Adapters.IAdapterEnterpriseRepository;
 import com.agro.inteligente.Enterprise.Domain.EnterpriseDto;
 import com.agro.inteligente.User.Repository.Models.UserModelRepository;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.agro.inteligente.Enterprise.Exception.EnterpriseException.CNPJ_ALREADY_EXIST;
@@ -67,5 +69,9 @@ public class EnterpriseCase {
 
         this.logger.info("Email de empresa criada foi agendado. email a ser enviado = " + userLogged.getEmail());
 
+    }
+
+    public List<EnterpriseResponseDto> getMyEnterprise(){
+        return this.adapterEnterpriseRepository.getMyEnterprise(this.jwtService.getUserContextSecurity().getId());
     }
 }

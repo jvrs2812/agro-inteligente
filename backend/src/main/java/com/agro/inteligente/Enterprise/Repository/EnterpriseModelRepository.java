@@ -1,6 +1,7 @@
 package com.agro.inteligente.Enterprise.Repository;
 
 import com.agro.inteligente.Enterprise.Domain.EnterpriseDto;
+import com.agro.inteligente.Enterprise.Domain.EnterpriseResponseDto;
 import com.agro.inteligente.User.Domain.UserDto;
 import com.agro.inteligente.User.Repository.Models.UserModelRepository;
 import jakarta.persistence.*;
@@ -50,6 +51,10 @@ public class EnterpriseModelRepository {
         enterpriseModelRepository.users = userModelRepositories;
 
         return enterpriseModelRepository;
+    }
+
+    public EnterpriseResponseDto toDomain(){
+        return new EnterpriseResponseDto(this.name_fancy, this.cnpj, this.adress, this.number, this.district, this.id.toString());
     }
 
 }
