@@ -30,6 +30,7 @@ public class EnterpriseQrCodeModelRepository {
                 .builder()
                 .qrcode_id(this.id.toString())
                 .expiredAt(this.expiredAt)
+                .url(this.url)
                 .build();
     }
 

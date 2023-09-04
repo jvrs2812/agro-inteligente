@@ -2,6 +2,7 @@ package com.agro.inteligente.Enterprise.Repository.Adapters;
 
 import com.agro.inteligente.Enterprise.Domain.EnterpriseDto;
 import com.agro.inteligente.Enterprise.Domain.EnterpriseQrCodeDto;
+import com.agro.inteligente.Enterprise.Domain.EnterpriseQrCodeReponseDto;
 import com.agro.inteligente.Enterprise.Domain.EnterpriseResponseDto;
 import com.agro.inteligente.User.Domain.UserDto;
 
@@ -22,5 +23,9 @@ public interface IAdapterEnterpriseRepository {
     EnterpriseResponseDto getMyEnterprise(UUID user, UUID enterprise_id);
 
     void updateUrlQrCode(String url, UUID idqrcode);
+
+    List<EnterpriseQrCodeDto> getAllExpired();
+
+    void deleteQrCode(UUID id);
 
 }

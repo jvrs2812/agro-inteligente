@@ -118,6 +118,8 @@ public class EnterpriseCase {
 
         this.logger.info("ENVIADO PARA NUVEM");
 
+        this.adapterEnterpriseRepository.updateUrlQrCode(urls.get(0), UUID.fromString(qrcode.getQrcode_id()));
+
         return EnterpriseQrCodeReponseDto
                 .builder()
                 .url(urls.get(0))

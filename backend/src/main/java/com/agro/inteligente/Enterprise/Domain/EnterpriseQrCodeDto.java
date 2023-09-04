@@ -12,4 +12,6 @@ public class EnterpriseQrCodeDto {
     private String qrcode_id;
 
     private Date expiredAt;
+
+    private String url;
 }

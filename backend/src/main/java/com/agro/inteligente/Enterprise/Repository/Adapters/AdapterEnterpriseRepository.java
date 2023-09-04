@@ -2,6 +2,7 @@ package com.agro.inteligente.Enterprise.Repository.Adapters;
 
 import com.agro.inteligente.Enterprise.Domain.EnterpriseDto;
 import com.agro.inteligente.Enterprise.Domain.EnterpriseQrCodeDto;
+import com.agro.inteligente.Enterprise.Domain.EnterpriseQrCodeReponseDto;
 import com.agro.inteligente.Enterprise.Domain.EnterpriseResponseDto;
 import com.agro.inteligente.Enterprise.Repository.EnterpriseModelRepository;
 import com.agro.inteligente.Enterprise.Repository.EnterpriseQrCodeModelRepository;
@@ -79,6 +80,25 @@ public class AdapterEnterpriseRepository implements IAdapterEnterpriseRepository
     @Override
     public void updateUrlQrCode(String url, UUID idqrcode) {
         this.repositoryQrcode.updateUrl(url, idqrcode);
+    }
+
+    @Override
+    public List<EnterpriseQrCodeDto> getAllExpired() {
+
+        List<EnterpriseQrCodeModelRepository> models = this.repositoryQrcode.getAllExpired(new Date());
+
+        List<EnterpriseQrCodeDto> dtos = new ArrayList<>();
+
+        for (int i = 0; i < models.size(); i++) {
+            dtos.add(models.get(i).toDomain());
+        }
+
+        return dtos;
+    }
+
+    @Override
+    public void deleteQrCode(UUID id) {
+        this.repositoryQrcode.deleteById(id);
     }
 
 
