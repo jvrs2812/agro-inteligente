@@ -6,4 +6,6 @@ public interface IValidation {
     boolean isValidId(String id);
 
     boolean isValidCNPJ(String cnpj);
+
+    boolean isValidUUID(String id);
 }

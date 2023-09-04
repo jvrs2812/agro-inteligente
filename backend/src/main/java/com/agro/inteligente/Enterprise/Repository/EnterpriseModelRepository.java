@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Table(name = "enterprise")
@@ -49,6 +50,18 @@ public class EnterpriseModelRepository {
         }
 
         enterpriseModelRepository.users = userModelRepositories;
+
+        return enterpriseModelRepository;
+    }
+
+    public static EnterpriseModelRepository toModelDto(EnterpriseResponseDto enterpriseDto){
+        EnterpriseModelRepository enterpriseModelRepository = new EnterpriseModelRepository();
+        enterpriseModelRepository.id = UUID.fromString(enterpriseDto.getId());
+        enterpriseModelRepository.adress = enterpriseDto.getAdress();
+        enterpriseModelRepository.cnpj = enterpriseDto.getCnpj();
+        enterpriseModelRepository.district = enterpriseDto.getDistrict();
+        enterpriseModelRepository.name_fancy = enterpriseDto.getName_fancy();
+        enterpriseModelRepository.number = enterpriseDto.getNumber();
 
         return enterpriseModelRepository;
     }

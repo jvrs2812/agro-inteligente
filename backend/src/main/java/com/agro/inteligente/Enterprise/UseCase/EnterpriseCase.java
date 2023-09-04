@@ -3,26 +3,32 @@ package com.agro.inteligente.Enterprise.UseCase;
 import com.agro.inteligente.Configuration.Security.JwtService;
 import com.agro.inteligente.Email.Domain.EmailSaveDto;
 import com.agro.inteligente.Email.Repository.Adapters.IAdapterEmailRepository;
+import com.agro.inteligente.Enterprise.Domain.EnterpriseQrCodeDto;
+import com.agro.inteligente.Enterprise.Domain.EnterpriseQrCodeReponseDto;
 import com.agro.inteligente.Enterprise.Domain.EnterpriseResponseDto;
 import com.agro.inteligente.Enterprise.Repository.Adapters.IAdapterEnterpriseRepository;
 import com.agro.inteligente.Enterprise.Domain.EnterpriseDto;
+import com.agro.inteligente.User.Domain.UserDto;
 import com.agro.inteligente.User.Repository.Models.UserModelRepository;
-import com.agro.inteligente.User.UseCases.Recovery;
 import com.agro.inteligente.Utils.Commom.Archive.IArchive;
+import com.agro.inteligente.Utils.Commom.Aws.IStorageAdapter;
 import com.agro.inteligente.Utils.Commom.Exception.AgroException;
+import com.agro.inteligente.Utils.Commom.QrCode.IQrCode;
+import com.agro.inteligente.Utils.Commom.QrCode.MultipartImage;
 import com.agro.inteligente.Utils.Commom.Validation;
-import com.agro.inteligente.Email.IEmailService;
+import com.google.zxing.WriterException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
-import static com.agro.inteligente.Enterprise.Exception.EnterpriseException.CNPJ_ALREADY_EXIST;
-import static com.agro.inteligente.Enterprise.Exception.EnterpriseException.CNPJ_NOT_VALID;
+import static com.agro.inteligente.Enterprise.Exception.EnterpriseException.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +43,13 @@ public class EnterpriseCase {
     private final IAdapterEmailRepository emailRepository;
 
     private final IArchive archive;
+
+    private final IQrCode qrCode;
+
+    private final IStorageAdapter storageAdapter;
+
+    @Value("${api.aws.bucket-image-qrcode}")
+    private String bucket_qrcode;
 
     private Logger logger = LoggerFactory.getLogger(EnterpriseCase.class);
 
@@ -73,5 +86,42 @@ public class EnterpriseCase {
 
     public List<EnterpriseResponseDto> getMyEnterprise(){
         return this.adapterEnterpriseRepository.getMyEnterprise(this.jwtService.getUserContextSecurity().getId());
+    }
+
+    public EnterpriseQrCodeReponseDto generationQrCode(String enterprise_id) throws AgroException, IOException, WriterException {
+        if(!this.validation.isValidUUID(enterprise_id)){
+            this.logger.info("ID ENTERPRISE INFORMADO É INVÁLIDO");
+            throw new AgroException(ID_ENTERPRISE_IS_INVALID);
+        }
+
+        UserDto userLogged = this.jwtService.getUserContextSecurity().toDomain();
+
+        if(!this.adapterEnterpriseRepository.existEntepriseForThisUser(userLogged.getId(), UUID.fromString(enterprise_id))){
+            this.logger.info("ID ENTERPRISE INFORMADO É INVÁLIDO");
+            throw new AgroException(ID_ENTERPRISE_IS_INVALID);
+        }
+
+        this.logger.info("empresa encontrada, preparando para criar o qrcode");
+
+        EnterpriseResponseDto enterpriseDto = this.adapterEnterpriseRepository.getMyEnterprise(userLogged.getId(), UUID.fromString(enterprise_id));
+
+        EnterpriseQrCodeDto qrcode = this.adapterEnterpriseRepository.CreateQrCode(enterpriseDto);
+
+        this.logger.info("Gerando QRCODE");
+
+        MultipartFile[] image = new MultipartFile[]{
+                this.qrCode.generate(qrcode.getQrcode_id(), 300)
+        };
+        this.logger.info("QRCODE GERADO");
+
+        List<String> urls = this.storageAdapter.saveImage(image, bucket_qrcode);
+
+        this.logger.info("ENVIADO PARA NUVEM");
+
+        return EnterpriseQrCodeReponseDto
+                .builder()
+                .url(urls.get(0))
+                .expired_at(qrcode.getExpiredAt())
+                .build();
     }
 }

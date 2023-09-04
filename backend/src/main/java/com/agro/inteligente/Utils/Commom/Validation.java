@@ -48,4 +48,14 @@ public class Validation implements IValidation {
         }
     }
 
+    @Override
+    public boolean isValidUUID(String id) {
+        try{
+            UUID.fromString(id);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
 }

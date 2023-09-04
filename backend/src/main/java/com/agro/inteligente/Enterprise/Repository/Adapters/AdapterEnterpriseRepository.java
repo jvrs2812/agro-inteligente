@@ -1,22 +1,28 @@
 package com.agro.inteligente.Enterprise.Repository.Adapters;
 
 import com.agro.inteligente.Enterprise.Domain.EnterpriseDto;
+import com.agro.inteligente.Enterprise.Domain.EnterpriseQrCodeDto;
 import com.agro.inteligente.Enterprise.Domain.EnterpriseResponseDto;
 import com.agro.inteligente.Enterprise.Repository.EnterpriseModelRepository;
+import com.agro.inteligente.Enterprise.Repository.EnterpriseQrCodeModelRepository;
 import com.agro.inteligente.Enterprise.Repository.IEnterpriseRepository;
+import com.agro.inteligente.Enterprise.Repository.IEnterpriseRepositoryQrcode;
 import com.agro.inteligente.User.Domain.UserDto;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class AdapterEnterpriseRepository implements IAdapterEnterpriseRepository{
 
     private final IEnterpriseRepository repository;
+
+    private final IEnterpriseRepositoryQrcode repositoryQrcode;
 
     @Override
     public void CreateEnterprise(EnterpriseDto dto, UserDto user) {
@@ -41,6 +47,38 @@ public class AdapterEnterpriseRepository implements IAdapterEnterpriseRepository
         }
 
         return enterpriseResponseDtos;
+    }
+
+    @Override
+    public EnterpriseQrCodeDto CreateQrCode(EnterpriseResponseDto enterprise) {
+
+        LocalDateTime dateActually = LocalDateTime.now();
+
+        LocalDateTime dateExpirantion = dateActually.plusMinutes(15);
+
+        EnterpriseModelRepository enterpriseModelRepository = new EnterpriseModelRepository();
+
+        EnterpriseQrCodeModelRepository model = new EnterpriseQrCodeModelRepository();
+        model.setEnterprise(EnterpriseModelRepository.toModelDto(enterprise));
+        model.setExpiredAt(Date.from(dateExpirantion.atZone(ZoneId.systemDefault()).toInstant()));
+        model.setUrl("");
+
+        return this.repositoryQrcode.save(model).toDomain();
+    }
+
+    @Override
+    public boolean existEntepriseForThisUser(UUID user_id, UUID enteprise_id) {
+        return this.repository.existEnterpriseForThisUser(user_id, enteprise_id);
+    }
+
+    @Override
+    public EnterpriseResponseDto getMyEnterprise(UUID user, UUID enterprise_id) {
+        return this.repository.getMyEnterprise(user, enterprise_id).toDomain();
+    }
+
+    @Override
+    public void updateUrlQrCode(String url, UUID idqrcode) {
+        this.repositoryQrcode.updateUrl(url, idqrcode);
     }
 
 
