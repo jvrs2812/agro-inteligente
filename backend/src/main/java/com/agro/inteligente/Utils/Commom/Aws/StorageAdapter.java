@@ -27,8 +27,6 @@ import java.util.UUID;
 @Service
 public class StorageAdapter implements IStorageAdapter{
 
-    private AmazonS3 _client;
-
     @Value("${aws_access}")
     private String accessKey;
 
@@ -37,7 +35,7 @@ public class StorageAdapter implements IStorageAdapter{
 
     @Override
     public List<String> saveImage(MultipartFile[] multipartFile, String bucket) {
-        this._client = AmazonS3ClientBuilder.standard()
+        AmazonS3 _client = AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey))).withRegion(Regions.SA_EAST_1).build();
         List<String> urls = new ArrayList<String>();
 
@@ -70,6 +68,8 @@ public class StorageAdapter implements IStorageAdapter{
 
     @Override
     public void deleteImage(String urlImage, String bucket) {
+        AmazonS3 _client = AmazonS3ClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey))).withRegion(Regions.SA_EAST_1).build();
         _client.deleteObject(bucket, FilenameUtils.getName(urlImage));
     }
 }
