@@ -11,7 +11,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 				"com.agro.inteligente.User.Repository",
 				"com.agro.inteligente.Token",
 				"com.agro.inteligente.Enterprise.Repository",
-				"com.agro.inteligente.Email.Repository"
+				"com.agro.inteligente.Email.Repository",
+				"com.agro.inteligente.Analyze.Repository"
 		}
 )
 @EnableScheduling

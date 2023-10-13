@@ -1,8 +1,8 @@
 
-grass - v1 2023-03-11 2:12pm
+tomato 2 instance segmentation - v8 2023-09-08 8:05pm
 ==============================
 
-This dataset was exported via roboflow.com on March 11, 2023 at 5:13 PM GMT
+This dataset was exported via roboflow.com on September 18, 2023 at 3:04 PM GMT
 
 Roboflow is an end-to-end computer vision platform that helps you
 * collaborate with your team on computer vision projects
@@ -17,12 +17,12 @@ visit https://github.com/roboflow/notebooks
 
 To find over 100k other datasets and pre-trained models, visit https://universe.roboflow.com
 
-The dataset includes 82 images.
-Grass are annotated in YOLOv8 format.
+The dataset includes 820 images.
+Green-yellow-red-bad are annotated in YOLO v5 PyTorch format.
 
 The following pre-processing was applied to each image:
 * Auto-orientation of pixel data (with EXIF-orientation stripping)
-* Resize to 410x410 (Stretch)
+* Resize to 640x640 (Stretch)
 
 No image augmentation techniques were applied.
 

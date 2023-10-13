@@ -8,4 +8,6 @@ public interface IStorageAdapter {
     List<String> saveImage(MultipartFile[] multipartFile, String bucket);
 
     void deleteImage(String urlImage, String bucket);
+
+    String uploadImage(byte[] imageBytes, String bucketName, String objectKey);
 }

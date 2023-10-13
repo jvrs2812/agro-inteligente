@@ -48,6 +48,8 @@ public class EnterpriseCase {
 
     private final IStorageAdapter storageAdapter;
 
+    private final EnterpriseValidation enterpriseValidation;
+
     @Value("${api.aws.bucket-image-qrcode}")
     private String bucket_qrcode;
 
@@ -89,17 +91,10 @@ public class EnterpriseCase {
     }
 
     public EnterpriseQrCodeReponseDto generationQrCode(String enterprise_id) throws AgroException, IOException, WriterException {
-        if(!this.validation.isValidUUID(enterprise_id)){
-            this.logger.info("ID ENTERPRISE INFORMADO É INVÁLIDO");
-            throw new AgroException(ID_ENTERPRISE_IS_INVALID);
-        }
 
         UserDto userLogged = this.jwtService.getUserContextSecurity().toDomain();
 
-        if(!this.adapterEnterpriseRepository.existEntepriseForThisUser(userLogged.getId(), UUID.fromString(enterprise_id))){
-            this.logger.info("ID ENTERPRISE INFORMADO É INVÁLIDO");
-            throw new AgroException(ID_ENTERPRISE_IS_INVALID);
-        }
+        this.enterpriseValidation.isValidEnterprise(enterprise_id, userLogged.getId().toString());
 
         this.logger.info("empresa encontrada, preparando para criar o qrcode");
 

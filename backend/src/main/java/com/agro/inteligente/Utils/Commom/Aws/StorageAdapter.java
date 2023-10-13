@@ -72,4 +72,24 @@ public class StorageAdapter implements IStorageAdapter{
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey))).withRegion(Regions.SA_EAST_1).build();
         _client.deleteObject(bucket, FilenameUtils.getName(urlImage));
     }
+
+    public String uploadImage(byte[] imageBytes, String bucketName, String objectKey) {
+        AmazonS3 _client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey))).withRegion(Regions.SA_EAST_1).build();
+
+        InputStream input = new ByteArrayInputStream(imageBytes);
+        String url = UUID.randomUUID().toString();
+
+        ObjectMetadata data = new ObjectMetadata();
+
+        data.setContentType("png");
+
+        PutObjectRequest _obj = new PutObjectRequest(bucketName, url, input, data);
+
+        _client.putObject(_obj);
+
+        URL request = _client.getUrl(bucketName, url);
+
+        url = request.getProtocol() + "://"+ request.getHost() + request.getFile();
+        return url;
+    }
 }
