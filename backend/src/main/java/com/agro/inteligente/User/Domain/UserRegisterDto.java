@@ -23,6 +23,9 @@ public class UserRegisterDto {
     @Pattern(regexp = "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})", message = "cpf inválido")
     private String cpf;
 
+    @NotEmpty(message = "nome está nulo")
+    private String name;
+
     public String getEmail() {
         return email;
     }
@@ -45,6 +48,14 @@ public class UserRegisterDto {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
 

@@ -28,6 +28,9 @@ public class UserModelRepository implements UserDetails {
     @NotNull
     private String cpf;
 
+    @NotNull
+    private String name;
+
     public UUID getId() {
         return id;
     }
@@ -90,12 +93,21 @@ public class UserModelRepository implements UserDetails {
         this.cpf = cpf;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public static UserModelRepository toModelRegister(UserRegisterDto register){
         UserModelRepository userModel = new UserModelRepository();
         userModel.id = UUID.randomUUID();
         userModel.cpf = register.getCpf();
         userModel.email = register.getEmail();
         userModel.password = register.getPassword();
+        userModel.name = register.getName();
 
         return userModel;
     }
@@ -106,6 +118,7 @@ public class UserModelRepository implements UserDetails {
         userModel.cpf = user.getCpf();
         userModel.email = user.getEmail();
         userModel.password = user.getPassword();
+        userModel.name = user.getName();
 
         return userModel;
     }
@@ -115,6 +128,7 @@ public class UserModelRepository implements UserDetails {
                 .email(this.email)
                 .password(this.password)
                 .id(this.id)
+                .name(this.name)
                 .build();
     }
 

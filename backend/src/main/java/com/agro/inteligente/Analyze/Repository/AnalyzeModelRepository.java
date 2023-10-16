@@ -1,6 +1,7 @@
 package com.agro.inteligente.Analyze.Repository;
 
 import com.agro.inteligente.Analyze.Domain.AnalyzeDto;
+import com.agro.inteligente.Analyze.Domain.AnalyzeResponseDto;
 import com.agro.inteligente.Enterprise.Domain.EnterpriseDto;
 import com.agro.inteligente.Enterprise.Domain.EnterpriseResponseDto;
 import com.agro.inteligente.Enterprise.Repository.EnterpriseModelRepository;
@@ -49,5 +50,9 @@ public class AnalyzeModelRepository {
         analyzeModelRepository.enterprise = enterprise;
 
         return analyzeModelRepository;
+    }
+
+    public AnalyzeResponseDto toDto(){
+        return new AnalyzeResponseDto(this.url_image, LocalDateTime.ofInstant(this.date_analyze.toInstant(), ZoneId.systemDefault()));
     }
 }

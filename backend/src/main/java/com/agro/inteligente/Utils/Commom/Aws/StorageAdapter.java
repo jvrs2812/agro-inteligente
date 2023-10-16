@@ -79,11 +79,10 @@ public class StorageAdapter implements IStorageAdapter{
         InputStream input = new ByteArrayInputStream(imageBytes);
         String url = UUID.randomUUID().toString();
 
-        ObjectMetadata data = new ObjectMetadata();
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType("text/plain");
 
-        data.setContentType("png");
-
-        PutObjectRequest _obj = new PutObjectRequest(bucketName, url, input, data);
+        PutObjectRequest _obj = new PutObjectRequest(bucketName, url, input, metadata);
 
         _client.putObject(_obj);
 

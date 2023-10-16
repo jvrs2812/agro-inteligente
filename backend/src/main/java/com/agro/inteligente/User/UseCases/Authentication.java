@@ -10,12 +10,14 @@ import com.agro.inteligente.Utils.Commom.Exception.AgroException;
 import com.agro.inteligente.Utils.Commom.IValidation;
 import com.agro.inteligente.User.Exception.UserExceptionEnum;
 import lombok.RequiredArgsConstructor;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -61,6 +63,8 @@ public class Authentication {
                 .access_token(jwtToken)
                 .refresh_token(refreshToken)
                 .expiredAt(this.jwtService.gerarTimeout(jwtExpiration))
+                .dateGenerate(LocalDateTime.now())
+                .name(userSaved.getName())
                 .build();
     }
 
@@ -93,6 +97,8 @@ public class Authentication {
                 .expiredAt(this.jwtService.gerarTimeout(jwtExpiration))
                 .access_token(this.jwtService.generateToken(user))
                 .refresh_token(refreshToken)
+                .dateGenerate(LocalDateTime.now())
+                .name(user.getName())
                 .build();
     }
 
@@ -133,6 +139,8 @@ public class Authentication {
                 .refresh_token(refreshToken.getRefreshtoken())
                 .expiredAt(this.jwtService.gerarTimeout(jwtExpiration))
                 .access_token(accesToken)
+                .dateGenerate(LocalDateTime.now())
+                .name(userLogged.getName())
                 .build();
 
     }
