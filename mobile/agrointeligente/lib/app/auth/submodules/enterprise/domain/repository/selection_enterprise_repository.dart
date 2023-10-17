@@ -18,7 +18,11 @@ class SelectionEnterpriseRepository implements ISelectionEnterpriseRepository {
     try {
       return SuccessResponse(await _datasource.selectionEnterprise());
     } on IEnterpriseFailure catch (e) {
-      return FailureResponse(DatasourceFailure(message: e.message));
+      if (e is DatasourceFailure) {
+        return FailureResponse(DatasourceFailure(message: e.message));
+      } else {
+        return FailureResponse(SocketFailure(message: e.message));
+      }
     } catch (e) {
       return FailureResponse(DatasourceFailure(message: '$e'));
     }

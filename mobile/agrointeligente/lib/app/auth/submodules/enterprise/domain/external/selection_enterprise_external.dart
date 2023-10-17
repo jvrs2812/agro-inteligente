@@ -14,23 +14,33 @@ class SelectionEnterpriseExternal implements ISelectionEntepriseExternal {
   Future<List<EnterpriseResponse>> selectionEnterprise() async {
     AuthStore auth = Modular.get<AuthStore>();
 
+    List<EnterpriseResponse> enterprises = [];
+
     String url_base = dotenv.get('BASE_URL');
+
     var result = await http.get(
       Uri.parse('${url_base}my-enterprise'),
       headers: <String, String>{
         'Authorization': 'Bearer ${auth.state.acessToken}'
       },
-    );
+    ).timeout(const Duration(seconds: 10),
+        onTimeout: () => http.Response('Sem conexão', 408));
 
-    if (result.statusCode == 403) {
-      Modular.to.pushNamedAndRemoveUntil('/login', (p0) => false);
+    if (result.statusCode == 408) {
+      throw SocketFailure(message: "Sem conexão");
     }
 
-    if (result.statusCode != 200) {
+    if (result.statusCode == 403) {
+      await Modular.to.pushNamedAndRemoveUntil('/login', (p0) => false);
+    }
+
+    if (result.statusCode != 200 && result.statusCode != 403) {
       throw DatasourceFailure(message: 'Algo deu errado ao pesquisar.');
     }
 
-    List<EnterpriseResponse> enterprises = [];
+    if (result.statusCode == 403) {
+      throw DatasourceFailure(message: 'A sessão expirou. Relogue');
+    }
 
     var lista = jsonDecode(result.body)['data'];
 

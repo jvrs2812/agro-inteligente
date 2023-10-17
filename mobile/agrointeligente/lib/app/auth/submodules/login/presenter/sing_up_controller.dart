@@ -31,8 +31,10 @@ class SingUpController extends Store<SingUpRequest> {
 
     result.fold(onFailure: (failure) {
       setLoading(false);
+      update(state, force: true);
       return asuka.showSnackBar(SnackBar(
-        content: Text('${failure.message}', textAlign: TextAlign.center),
+        content: Text('${failure.message}',
+            textAlign: TextAlign.center, style: const TextStyle(fontSize: 10)),
         backgroundColor: Colors.red,
         duration: const Duration(milliseconds: 1500),
       ));

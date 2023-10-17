@@ -39,6 +39,7 @@ class EnterpriseWidget extends StatelessWidget {
             const SizedBox(height: 8.0),
             Text(
               companyName,
+              textAlign: TextAlign.center,
               style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,

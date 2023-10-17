@@ -27,13 +27,12 @@ class LoginController extends Store<LoginCredentials> {
       update(state, force: true);
       setLoading(false);
       return asuka.showSnackBar(SnackBar(
-        content: Text('${failure.message}', textAlign: TextAlign.center),
-        backgroundColor: Colors.red,
-        duration: const Duration(seconds: 1),
-      ));
-    }, onSuccess: (sucess) {
+          content: Text('${failure.message}', textAlign: TextAlign.center),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 1)));
+    }, onSuccess: (sucess) async {
       update(state, force: true);
-      _authStore.setUserLogged(sucess);
+      await _authStore.setUserLogged(sucess);
       Modular.to.pushNamed('/enterprise');
     });
 

@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:agrointeligente/app/auth/store/external/refresh_token.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../submodules/login/domain/entities/response/user_logged.dart';
@@ -26,8 +28,46 @@ class AuthStore extends Store<UserLogged> {
     return state;
   }
 
-  bool isAcessTokenValid() {
-    return state.expirationTime.isAfter(DateTime.now());
+  Future<bool> isAcessTokenValid() async {
+    if (!isTokenExpired(state.acessToken)) {
+      return true;
+    } else {
+      if (!isTokenExpired(state.refreshToken)) {
+        return await refreshAndAttToken();
+      }
+      return false;
+    }
+  }
+
+  void logout() {
+    setUserLogged(UserLogged());
+    Modular.to.pushNamedAndRemoveUntil('/login', (p0) => false);
+  }
+
+  bool isTokenExpired(String jwtToken) {
+    try {
+      final Map<String, dynamic> decodedToken = JwtDecoder.decode(jwtToken);
+
+      // Verifica se o campo "exp" está presente no token
+      if (decodedToken.containsKey("exp")) {
+        // Obtém o valor do campo "exp"
+        int expValue = decodedToken["exp"];
+
+        // Obtém o tempo atual em segundos
+        int currentTimeInSeconds =
+            DateTime.now().millisecondsSinceEpoch ~/ 1000;
+
+        // Verifica se o token expirou
+        return currentTimeInSeconds >= expValue;
+      } else {
+        // Se o campo "exp" não estiver presente, considere como token expirado
+        return true;
+      }
+    } catch (e) {
+      // Tratamento de erro para lidar com tokens inválidos ou malformados
+      print("Erro ao decodificar o token: $e");
+      return true;
+    }
   }
 
   Future<UserLogged> getLocalStorage() async {
@@ -62,7 +102,7 @@ class AuthStore extends Store<UserLogged> {
 
     update(user);
 
-    prefs.setString("auth", jsonEncode(user.toJson()));
+    await prefs.setString("auth", jsonEncode(user.toJson()));
   }
 
   Future<bool> isLoggedIn() async {

@@ -1,4 +1,5 @@
 import 'package:agrointeligente/app/auth/submodules/home/home_module.dart';
+import 'package:agrointeligente/app/shared/guards/app_guard.dart';
 import 'package:agrointeligente/main.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'auth/submodules/enterprise/enterprise_module.dart';
@@ -16,7 +17,7 @@ class AppModule extends Module {
   void routes(r) {
     r.child(Modular.initialRoute, child: (context) => const SplashPage());
     r.module('/login', module: LoginModule());
-    r.module('/enterprise', module: EnterpriseModule());
-    r.module('/home', module: HomeModule());
+    r.module('/enterprise', module: EnterpriseModule(), guards: [AppGuard()]);
+    r.module('/home', module: HomeModule(), guards: [AppGuard()]);
   }
 }

@@ -7,8 +7,6 @@ class AppGuard extends RouteGuard {
   Future<bool> canActivate(String path, ModularRoute router) async {
     AuthStore auth = Modular.get();
 
-    if (!auth.isAcessTokenValid()) await auth.refreshAndAttToken();
-
-    return auth.isAcessTokenValid();
+    return await auth.isAcessTokenValid();
   }
 }

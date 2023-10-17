@@ -18,7 +18,7 @@ public class RabbitMQConfig {
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setRoutingKey("analyze");
-        rabbitTemplate.setReplyTimeout(20000);
+        rabbitTemplate.setReplyTimeout(25000);
         return rabbitTemplate;
     }
 }

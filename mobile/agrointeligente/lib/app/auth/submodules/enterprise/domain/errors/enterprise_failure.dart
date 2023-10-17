@@ -40,3 +40,14 @@ class DatasourceFailure implements IEnterpriseFailure {
     return message ?? '';
   }
 }
+
+class SocketFailure implements IEnterpriseFailure {
+  @override
+  final String? message;
+  SocketFailure({this.message});
+
+  @override
+  String toString() {
+    return message ?? '';
+  }
+}

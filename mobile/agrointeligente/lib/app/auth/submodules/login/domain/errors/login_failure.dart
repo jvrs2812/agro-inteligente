@@ -40,3 +40,14 @@ class DatasourceFailure implements ILoginFailure {
     return message ?? '';
   }
 }
+
+class SocketFailure implements ILoginFailure {
+  @override
+  final String? message;
+  SocketFailure({this.message});
+
+  @override
+  String toString() {
+    return message ?? '';
+  }
+}

@@ -1,5 +1,6 @@
 import 'package:agrointeligente/app/auth/store/enterprise_store.dart';
 import 'package:agrointeligente/app/auth/submodules/enterprise/domain/entities/response/EnterpriseResponse.dart';
+import 'package:agrointeligente/app/auth/submodules/enterprise/domain/errors/enterprise_failure.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
@@ -33,12 +34,14 @@ class EnterpriseController extends Store<List<EnterpriseResponse>> {
         setLoading(false);
       },
       onFailure: (failure) {
-        update(state, force: true);
+        if (failure is SocketFailure) {
+          setError(failure);
+        }
         setLoading(false);
         return asuka.showSnackBar(SnackBar(
           content: Text('${failure.message}', textAlign: TextAlign.center),
           backgroundColor: Colors.red,
-          duration: const Duration(seconds: 1),
+          duration: const Duration(milliseconds: 1500),
         ));
       },
     );

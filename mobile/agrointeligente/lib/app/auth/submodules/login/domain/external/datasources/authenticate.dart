@@ -17,7 +17,13 @@ class ApiUserDataSource implements IAuthenticateUserDatasource {
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
-    );
+    ).timeout(const Duration(seconds: 20),
+        onTimeout: () => http.Response('Sem conexão', 408));
+
+    if (result.statusCode == 408) {
+      throw SocketFailure(message: "Sem conexão");
+    }
+    ;
 
     if (result.statusCode == 403) {
       throw DatasourceFailure(message: 'Usuário ou senha estão incorretos.');

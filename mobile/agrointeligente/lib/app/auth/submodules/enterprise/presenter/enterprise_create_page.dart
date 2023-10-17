@@ -65,6 +65,18 @@ class _EnterpriseCreatePageState extends State<EnterpriseCreatePage> {
                           onSaved: (cnpj) => controller.setCnpj(cnpj ?? ''),
                         ),
                         TextFieldContainer(
+                          controller: nameFancyController,
+                          enabled: !controller.isLoading,
+                          icon: Icons.vpn_key,
+                          focusNode: focusNodenameFancy,
+                          onFieldSubmitted: (_) =>
+                              focusNodeNumber.requestFocus(),
+                          hintText: "Nome fantasia",
+                          onChanged: controller.setNameFancy,
+                          onSaved: (fancy) =>
+                              controller.setNameFancy(fancy ?? ''),
+                        ),
+                        TextFieldContainer(
                           controller: adressController,
                           enabled: !controller.isLoading,
                           keyboardType: TextInputType.streetAddress,
@@ -77,18 +89,6 @@ class _EnterpriseCreatePageState extends State<EnterpriseCreatePage> {
                           onChanged: controller.setAdres,
                           onSaved: (adress) =>
                               controller.setAdres(adress ?? ''),
-                        ),
-                        TextFieldContainer(
-                          controller: nameFancyController,
-                          enabled: !controller.isLoading,
-                          icon: Icons.vpn_key,
-                          focusNode: focusNodenameFancy,
-                          onFieldSubmitted: (_) =>
-                              focusNodeNumber.requestFocus(),
-                          hintText: "Nome fantasia",
-                          onChanged: controller.setNameFancy,
-                          onSaved: (fancy) =>
-                              controller.setNameFancy(fancy ?? ''),
                         ),
                         TextFieldContainer(
                           controller: numberController,

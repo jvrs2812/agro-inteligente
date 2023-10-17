@@ -29,9 +29,22 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.green,
         child: const Icon(Icons.camera_alt),
       ),
+      appBar: AppBar(
+        shadowColor: Colors.green,
+        backgroundColor: Colors.green,
+        actions: [
+          // Botão de logout
+          IconButton(
+            icon: const Icon(Icons.exit_to_app),
+            onPressed: () {
+              Modular.get<AuthStore>().logout();
+            },
+          ),
+        ],
+      ),
       body: Column(
         children: [
-          const Padding(padding: EdgeInsets.only(top: 50)),
+          const Padding(padding: EdgeInsets.only(top: 20)),
           Padding(
             padding: const EdgeInsets.only(left: 20),
             child: Text(
@@ -46,7 +59,7 @@ class _HomePageState extends State<HomePage> {
             store: homeController,
             onState: (context, state) {
               return SizedBox(
-                height: MediaQuery.of(context).size.height - 100,
+                height: MediaQuery.of(context).size.height - 145,
                 width: double.infinity,
                 child: state.isNotEmpty
                     ? ListView.builder(
