@@ -31,11 +31,10 @@ class LoginController extends Store<LoginCredentials> {
         backgroundColor: Colors.red,
         duration: const Duration(seconds: 1),
       ));
-    }, onSuccess: (sucess) async {
-      await _authStore.setUserLogged(sucess);
+    }, onSuccess: (sucess) {
       update(state, force: true);
-      await Modular.to.pushNamedAndRemoveUntil(
-          '/enterprise', (Route<dynamic> route) => false);
+      _authStore.setUserLogged(sucess);
+      Modular.to.pushNamed('/enterprise');
     });
 
     setLoading(false);

@@ -152,6 +152,8 @@ class _SingUpPageState extends State<SingUpPage> {
                                         focusNodeEmail.unfocus();
                                         focusNodePassword.unfocus();
                                         if (formKey.currentState!.validate()) {
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
                                           controller.onSingInPress(state);
                                         }
                                       },

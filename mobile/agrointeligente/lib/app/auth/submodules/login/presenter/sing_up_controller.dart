@@ -30,18 +30,16 @@ class SingUpController extends Store<SingUpRequest> {
     final result = await _regiteruser(state);
 
     result.fold(onFailure: (failure) {
-      update(state, force: true);
       setLoading(false);
       return asuka.showSnackBar(SnackBar(
         content: Text('${failure.message}', textAlign: TextAlign.center),
         backgroundColor: Colors.red,
-        duration: const Duration(seconds: 1),
+        duration: const Duration(milliseconds: 1500),
       ));
-    }, onSuccess: (sucess) async {
-      await _authStore.setUserLogged(sucess);
+    }, onSuccess: (sucess) {
+      _authStore.setUserLogged(sucess);
       update(state, force: true);
-      await Modular.to.pushNamedAndRemoveUntil(
-          '/enterprise', (Route<dynamic> route) => false);
+      Modular.to.pushNamed('/enterprise');
     });
 
     setLoading(false);

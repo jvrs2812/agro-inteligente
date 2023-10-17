@@ -33,9 +33,13 @@ class EnterpriseModule extends Module {
 
   @override
   void routes(r) {
-    r.child('/',
-        child: (context) => const EnterprisePage(), guards: [AppGuard()]);
-    r.child('/create-enterprise',
-        child: (context) => EnterpriseCreatePage(), guards: [AppGuard()]);
+    r.child(
+      '/',
+      child: (context) => const EnterprisePage(),
+    );
+    r.child(
+      '/create-enterprise',
+      child: (context) => EnterpriseCreatePage(),
+    );
   }
 }

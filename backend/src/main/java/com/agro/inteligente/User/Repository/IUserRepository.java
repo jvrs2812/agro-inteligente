@@ -14,6 +14,7 @@ import java.util.UUID;
 @Repository
 public interface IUserRepository extends JpaRepository<UserModelRepository, UUID> {
 
+    @Query(value = "select * from user_table where email = :email", nativeQuery = true)
     Optional<UserModelRepository> findByEmail(String email);
 
     @Query(value = "select count(*) > 0 from user_table where cpf = :cpf", nativeQuery = true)

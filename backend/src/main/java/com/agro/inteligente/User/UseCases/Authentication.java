@@ -95,7 +95,7 @@ public class Authentication {
         return UserResponse
                 .builder()
                 .expiredAt(this.jwtService.gerarTimeout(jwtExpiration))
-                .access_token(this.jwtService.generateToken(user))
+                .access_token(jwtToken)
                 .refresh_token(refreshToken)
                 .dateGenerate(LocalDateTime.now())
                 .name(user.getName())

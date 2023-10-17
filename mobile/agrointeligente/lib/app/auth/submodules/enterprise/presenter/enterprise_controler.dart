@@ -15,7 +15,7 @@ class EnterpriseController extends Store<List<EnterpriseResponse>> {
 
   final EnterpriseStore enterprise = Modular.get();
 
-  void selectEnterprise(EnterpriseResponse enterpriseResponse) async {
+  void selectEnterprise(EnterpriseResponse enterpriseResponse) {
     enterprise.update(enterpriseResponse, force: true);
     Modular.to.pushNamed('/home');
   }
