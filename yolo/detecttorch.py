@@ -15,77 +15,9 @@ import io
 from dotenv import load_dotenv
 import os
 
-def closest_color(rgb, color_palette, color_names):
-    min_distance = math.inf
-    closest_color = None
 
-    for i, palette_color in enumerate(color_palette):
-        distance = math.sqrt((palette_color[0] - rgb[0])**2 + (palette_color[1] - rgb[1])**2 + (palette_color[2] - rgb[2])**2)
-        if distance < min_distance:
-            min_distance = distance
-            closest_color = color_names[i]
-
-    return closest_color
-
-class AnaliseCores:
-    def __init__(self, r, g, b, x1, y1, x2, y2):
-        self.rgb = (r, g, b)
-        self.coordenadas = (x1, y1, x2, y2)
-
-def anaylize(img):
-    model = torch.hub.load('ultralytics/yolov5', 'custom', path='F:\\projetos\\agro-inteligente\\yolo\\300ep.pt')  # local model
-
-    model.conf = 0.10  # NMS confidence threshold
-    model.iou = 0.35  # NMS IoU threshold
-    model.agnostic = False  # NMS class-agnostic
-    model.multi_label = False  # NMS multiple labels per box
-    model.classes = None  # (optional list) filter by class, i.e. = [0, 15, 16] for COCO persons, cats and dogs
-    model.max_det = 1000  # maximum number of detections per image
-    model.amp = False  # Automatic Mixed Precision (AMP) inference
-
-    imgs = [img]  
-
-
-    results = model(imgs)
-
-    image = Image.open(BytesIO(requests.get(imgs[0]).content))
-
-    # Extrair as coordenadas das frutas detectadas
-    detections = results.pandas().xyxy[0]
-
-    print(detections)
-
-    # Para cada coordenada, calcular a média das cores em torno dessa coordenada
-    average_colors = []
-    image_arr = np.array(image)
-    for _, detection in detections.iterrows():
-        x1, y1, x2, y2 = detection[['xmin', 'ymin', 'xmax', 'ymax']]
-        x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)  # Converter as coordenadas para inteiros
-        cropped_img = image_arr[y1:y2, x1:x2]
-        average_color = cropped_img.mean(axis=(0, 1))
-        cv2.rectangle(image_arr, (x1, y1), (x2, y2), average_color.tolist(), 20)
-        average_colors.append(AnaliseCores(int(average_color[0]), int(average_color[1]), int(average_color[2]), x1, y1, x2, y2))
-    
-    for obj in average_colors:
-        print(f"RGB: {obj.rgb}, Coordenadas: {obj.coordenadas}")
-        average_color = tuple(obj.rgb)  # Exemplo de cor média obtida
-        rgb_array = average_color  # Já é uma tupla
-        print(rgb_array)
-        palette_array = [(204, 77, 47), (195, 129, 47), (255, 65, 47)]
-        color_names = ['Madura', 'Verde', 'Passando do ponto']
-
-        closest = closest_color(rgb_array, palette_array, color_names)
-        print(closest)
-
-        cv2.putText(image_arr, closest, (obj.coordenadas[0], obj.coordenadas[1]), cv2.LINE_AA, 10, 
-                    (0, 255, 0), 5)
-    
-    image_with_boxes = Image.fromarray(image_arr)
-
-    return image_with_boxes
-
-def analyzeImage2(img):
-    model = torch.hub.load('ultralytics/yolov5', 'custom', path='./300ep.pt',  pretrained=True)  # local model
+def analyzeImage(img):
+    model = torch.hub.load('ultralytics/yolov5', 'custom', path='./300ep.pt')  # local model
 
     model.conf = 0.10  # NMS confidence threshold
     model.iou = 0.35  # NMS IoU threshold
@@ -122,9 +54,7 @@ def callback(ch, method, properties, body):
 
     print(url)
 
-    print("chegou aqui")
-
-    image = analyzeImage2(url)
+    image = analyzeImage(url)
 
     image_base64 = image_to_base64(image)
     
